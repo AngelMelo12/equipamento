@@ -80,7 +80,7 @@ public class EquipamentoRepository implements Repository<Equipamento, Long> {
                     Long id = resultSet.getLong( "ID_EQUIPAMENTO" );
                     String nome = resultSet.getString( "NM_EQUIPAMENTO" );
                     Equipamento Equipamento = new Equipamento(id, nome);
-                    equipamentos.add((br.com.fiap.domain.entity.Equipamento) equipamentos);
+                    equipamentos.add((new Equipamento(id, nome));
                 }
             }
 
@@ -88,7 +88,7 @@ public class EquipamentoRepository implements Repository<Equipamento, Long> {
             statement.close();
             connection.close();
         } catch (SQLException e) {
-            System.err.println( "Não foi possivel consultar os dados!\n" + e.getMessage() );
+            System.err.println( "Não foi possivel consultar os dados!\n" + e.getMessage());
         }
         return equipamentos;
     }
@@ -141,11 +141,11 @@ public class EquipamentoRepository implements Repository<Equipamento, Long> {
                 ps = connection.prepareStatement(sql);
                 ps.setString(1, equipamento.getNome());
                 ps.setLong(2, equipamento.getId());
-                int EquipamentosAtualizados = ps.executeUpdate();
+                int itensAtualizados = ps.executeUpdate();
 
                 ps.close();
                 connection.close();
-                if (EquipamentosAtualizados > 0) return findById(equipamento.getId());
+                if (ItensAtualizados > 0) return findById(equipamento.getId());
             } catch (SQLException e) catch (SQLException e){
                 throw new RuntimeException(e);
             } ;
@@ -155,8 +155,25 @@ public class EquipamentoRepository implements Repository<Equipamento, Long> {
 
     @Override
     public boolean delete(Long id) {
+
+        PreparedStatement ps = null;
+        var sql = "DELETE from equipamento where ID_EQUIPAMENTO=?";
+        ConnectionFactory factory = ConnectionFactory.build();
+        Connection connection = factory.getConnection();
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setLong(1, id);
+            int itensRemovidos = ps.executeUpdate();
+            ps.close();
+            connection.close();
+            if (itensRemovidos > 0) return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return false;
     }
+
+
 }
 
 
